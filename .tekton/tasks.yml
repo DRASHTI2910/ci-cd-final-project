@@ -55,4 +55,24 @@ spec:
         python -m pip install --upgrade pip wheel
         pip install -r requirements.txt
         nosetests $(params.args)
-Apply these changes to your cluster:
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+name: checkout
+spec: 
+  params:
+  - name: repo-url
+    type: string
+    description: The url of the git repo to clone
+  - name: branch
+    type: string
+    description: The branch to clone
+  steps:
+   - name: checkout 
+     image: bitnami/git:latest
+     command: [git]
+     args: ["clone","--branch","$(params.branch)", "$(params.repo-url)"]
+
+
